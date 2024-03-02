@@ -1,7 +1,5 @@
-const express = require('express');
-const router = express.Router();
 const Directors = require('../models/Directors');
-const Movies = require('../models/Movies');
+const Movie = require('../models/Movies');
 
 const getAllDirectors = async (req, res) => {
     //try code block to get all directors with a success message
@@ -58,20 +56,21 @@ const getAllDirectors = async (req, res) => {
 const getDirectorById = async (req, res) => {
     //try code block to get a director by id with a success message
     try{
-        const {id} = req.params;
-        Directors.findById(id)
-        .populate('Movie', 'title director')
+        const directorId= req.params.directorId;
+        Directors.findById(directorId)
+        .select('name _id')
+        .populate('movie', 'title director')
         .exec()
         .then(director => {
             if(!director){
                 console.log(director);
                 return res.status(404).json({
-                    message: 'Director not found',
+                    message: message.directorNotFound(),
                     success: false
                 });
             }   
         })
-        const director = await Directors.findById(id);
+        const director = await Directors.findById(directorId);
         res.status(200).json({ 
             data: director,
             message: `${req.method} - request to Director endpoint`, 
@@ -117,10 +116,21 @@ const createDirector = async (req, res) => {
 };
 
 const updateDirector = async (req, res) => {
-    const {id} = req.params;
     //try code block to update a director with a success message
     try{
-        const director = await Directors.findByIdAndUpdate(id, req.body, { new: true });
+        const {id} = req.params;
+        Directors.findByIdAndUpdate(id, req.body, { new: true })
+        .exec()
+        .then(director => {
+            if(!director){
+                console.log(director);
+                return res.status(404).json({
+                    message: 'Director not found',
+                    success: false
+                });
+            }
+        });
+        const director = await Directors.findByIdAndUpdate(id);
         res.status(200).json({ 
             data: director,
             message: `${req.method} - request to Director endpoint`, 
@@ -141,12 +151,13 @@ const updateDirector = async (req, res) => {
 };
 
 const deleteDirector = async (req, res) => {
-    const {id} = req.params;
     //try code block to delete a director with a success message
     try{
+        const {id} = req.params;
         const director = await Directors.findByIdAndDelete(id, req.body, { new: false });
         res.status(200).json({ 
             id,
+            data: director,
             message: `${req.method} - request to Director endpoint`, 
             success: true
         });

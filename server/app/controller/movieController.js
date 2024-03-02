@@ -1,5 +1,5 @@
 const Movies = require('../models/Movies');
-const Director = require('../models/Directors');
+const Directors = require('../models/Directors');
 
 const getAllMovies = async (req, res) => {
     //try code block to get all movies with a success message
@@ -52,15 +52,15 @@ const createMovie = async (req, res) => {
     //try code block to create a new movie with a success message
     try{
         const {movie} = req.body;
-        const directorData = await Director.findById(movie.director);
+        const directors = await Directors.findById(movie.directors);
         //attaching the director object to the movie
-        movie.director = directorData;
+        movie.directors = directors;
         //ceates a new movie model
-        const newMovie = new movie(movie);
+        const newMovie = new Movie(movie);
         //push the movie id to the directer.books array
-        directorData.movies.push(newMovie._id);
+        directors.movies.push(newMovie._id);
         //saves the movie and director data
-        const queries = [newMovie.save(), directorData.save()];
+        const queries = [newMovie.save(), directors.save()];
         await Promise.all(queries);
         console.log('data >>>', newMovie);
         res.status(200).json({ 
@@ -83,9 +83,10 @@ const createMovie = async (req, res) => {
 };
 
 const updateMovie = async (req, res) => {
-    const {id} = req.params;
+    
     //try code block to update a movie by id with a success message
     try{
+        const {id} = req.params;
         const movie = await Movies.findByIdAndUpdate(id, req.body, { new: true });
         res.status(200).json({ 
             data: movie,
@@ -107,9 +108,10 @@ const updateMovie = async (req, res) => {
 };
 
 const deleteMovie = async (req, res) => {
-    const {id} = req.params;
+    
     //try code block to delete a director with a success message
     try{
+        const {id} = req.params;
         const movie = await Movies.findByIdAndDelete(id, req.body, { new: false });
         res.status(200).json({ 
             id,
