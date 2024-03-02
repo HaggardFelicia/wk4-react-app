@@ -1,5 +1,5 @@
 const Directors = require('../models/Directors');
-const Movie = require('../models/Movies');
+const Movies = require('../models/Movies');
 
 const getAllDirectors = async (req, res) => {
     //try code block to get all directors with a success message
@@ -56,21 +56,20 @@ const getAllDirectors = async (req, res) => {
 const getDirectorById = async (req, res) => {
     //try code block to get a director by id with a success message
     try{
-        const directorId= req.params.directorId;
-        Directors.findById(directorId)
-        .select('name _id')
-        .populate('movie', 'title director')
+        const {id} = req.params;
+        Directors.findById(id)
+        .populate('Movie', 'title director')
         .exec()
         .then(director => {
             if(!director){
                 console.log(director);
                 return res.status(404).json({
-                    message: message.directorNotFound(),
+                    message: 'Director not found',
                     success: false
                 });
             }   
         })
-        const director = await Directors.findById(directorId);
+        const director = await Directors.findById(id);
         res.status(200).json({ 
             data: director,
             message: `${req.method} - request to Director endpoint`, 
