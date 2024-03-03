@@ -49,8 +49,68 @@ const getMovieById = async (req, res) => {
 }
 
 const createMovie = async (req, res) => {
+
+    const movie = req.body.movie;
+    const directorData = await Director.findById(movie.director);
+    movie.director = directorData;
+    const newMovie = new Movie(movie);
+    directorData.movie.push(newMovie._id);
+    Movie.find({
+        title: req.body.title,
+        director: req.body.director
+    })
+    .exec()
+    .then(result =>{
+        console.log(result);
+        if(result.length > 0){
+            return res.status(409).json({
+                message: 'Movie already exists'
+            });
+        }
+        const newMovie = new Movie({
+            _id: new mongoose.Types.ObjectId(),
+            title: req.body.title,
+            director: req.body.director
+        });
+        newMovie.save()
+        .then(result =>{
+            console.log(result);
+            res.status(201).json({
+                message: 'Movie saved',
+                movie: {
+                    title: result.title,
+                    director: result.director,
+                    _id: result._id,
+                    metadata:{
+                        method: req.method,
+                        host: req.hostname,
+                    }
+                }
+            })
+        })
+        .catch(err=>{
+            console.log(err.message);
+            res.status(500).json({
+                error: err.message
+            })
+        })
+    })
+    .catch(err=>{
+        //console.error(error);
+        res.status(500).json({
+            error: 'Unable to save movie with title: '+req.body.title
+        })
+    })
+    const queries = [newMovie.save(), directorData.save()];
+        await Promise.all(queries);
+        console.log('data >>>', newMovie);
+        res.status(200).json({ 
+            data: newMovie,
+            message: `${req.method} - request to Movie endpoint`, 
+            success: true
+        });
     //try code block to create a new movie with a success message
-    try{
+    /* try{
         const {movie} = req.body;
         const directorData = await Director.findById(movie.director);
         //attaching the director object to the movie
@@ -79,7 +139,7 @@ const createMovie = async (req, res) => {
             console.error(error);
             res.status(500).json(error);
         }
-    }
+    } */
 };
 
 const updateMovie = async (req, res) => {

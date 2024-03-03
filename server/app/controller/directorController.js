@@ -56,8 +56,9 @@ const getAllDirectors = async (req, res) => {
 const getDirectorById = async (req, res) => {
     //try code block to get a director by id with a success message
     try{
-        const {id} = req.params;
+        const id = req.params.id;
         Director.findById(id)
+            .select('name _id')
             .populate('movie', 'title director')
             .exec()
             .then(director => {

@@ -17,7 +17,7 @@ const directorsSchema = new mongoose.Schema(
             type: String,
             enum: [
                 "Male",
-                "Felmale"
+                "Female"
             ]
         },
         email: {
