@@ -55,6 +55,14 @@ const createMovie = async (req, res) => {
     movie.director = directorData;
     const newMovie = new Movie(movie);
     directorData.movie.push(newMovie._id);
+    const queries = [newMovie.save(), directorData.save()];
+        await Promise.all(queries);
+        console.log('data >>>', newMovie);
+        res.status(200).json({ 
+            data: newMovie,
+            message: `${req.method} - request to Movie endpoint`, 
+            success: true
+        });
     Movie.find({
         title: req.body.title,
         director: req.body.director
@@ -101,14 +109,6 @@ const createMovie = async (req, res) => {
             error: 'Unable to save movie with title: '+req.body.title
         })
     })
-    const queries = [newMovie.save(), directorData.save()];
-        await Promise.all(queries);
-        console.log('data >>>', newMovie);
-        res.status(200).json({ 
-            data: newMovie,
-            message: `${req.method} - request to Movie endpoint`, 
-            success: true
-        });
     //try code block to create a new movie with a success message
     /* try{
         const {movie} = req.body;

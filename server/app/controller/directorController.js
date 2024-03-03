@@ -69,13 +69,11 @@ const getDirectorById = async (req, res) => {
                         success: false
                     });
                 }   
+                res.status(200).json({ 
+                    director: director,
+                });
             })
-        const directors = await Director.findById(id);
-        res.status(200).json({ 
-            data: directors,
-            message: `${req.method} - request to Director endpoint`, 
-            success: true
-        });
+        // const directors = await Director.findById(id);
     }
     //catch code block to handle errors
     catch(error){
