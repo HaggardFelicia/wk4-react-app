@@ -52,15 +52,15 @@ const createMovie = async (req, res) => {
     //try code block to create a new movie with a success message
     try{
         const {movie} = req.body;
-        const director = await Director.findById(movie.director);
+        const directorData = await Director.findById(movie.director);
         //attaching the director object to the movie
-        movie.director = director;
+        movie.director = directorData;
         //ceates a new movie model
         const newMovie = new Movie(movie);
         //push the movie id to the directer.books array
-        director.movies.push(newMovie._id);
+        directorData.movies.push(newMovie._id);
         //saves the movie and director data
-        const queries = [newMovie.save(), director.save()];
+        const queries = [newMovie.save(), directorData.save()];
         await Promise.all(queries);
         console.log('data >>>', newMovie);
         res.status(200).json({ 
@@ -86,7 +86,7 @@ const updateMovie = async (req, res) => {
     const {id} = req.params;
     //try code block to update a movie by id with a success message
     try{
-        const movie = await Movies.findByIdAndUpdate(id, req.body, { new: true });
+        const movie = await Movie.findByIdAndUpdate(id, req.body, { new: true });
         res.status(200).json({ 
             data: movie,
             message: `${req.method} - request to Movie endpoint`, 
