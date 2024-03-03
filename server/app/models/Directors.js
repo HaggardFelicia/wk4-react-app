@@ -34,7 +34,7 @@ const directorsSchema = new mongoose.Schema(
             maxlength: [500, 'Description cannot be more than 500 characters'],
             trim: true,
         },
-        movies: [
+        movie: [
             {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Movie' 

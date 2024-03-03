@@ -58,17 +58,17 @@ const getDirectorById = async (req, res) => {
     try{
         const {id} = req.params;
         Director.findById(id)
-        .populate('Movie', 'title director')
-        .exec()
-        .then(director => {
-            if(!director){
-                console.log(director);
-                return res.status(404).json({
-                    message: 'Director not found',
-                    success: false
-                });
-            }   
-        })
+            .populate('movie', 'title director')
+            .exec()
+            .then(director => {
+                if(!director){
+                    console.log(director);
+                    return res.status(404).json({
+                        message: 'Director not found',
+                        success: false
+                    });
+                }   
+            })
         const directors = await Director.findById(id);
         res.status(200).json({ 
             data: directors,
