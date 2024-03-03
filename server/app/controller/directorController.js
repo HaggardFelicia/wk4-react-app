@@ -58,7 +58,7 @@ const getDirectorById = async (req, res) => {
     try{
         const {id} = req.params;
         Director.findById(id)
-            .populate('movie', 'title director')
+            .populate('movie')
             .exec()
             .then(director => {
                 if(!director){
