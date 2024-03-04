@@ -11,7 +11,7 @@ function SearchBar({onSubmit}){
 
     return(
         <div style={styles.searchBar}>
-            <h3>Search Bar</h3>
+            <h3>Director Search</h3>
             <form onSubmit={onSubmit} style={styles.h3}>
                 <label htmlFor='search'>Search:</label>
                 <input
@@ -19,12 +19,6 @@ function SearchBar({onSubmit}){
                     id='search'
                     name='search'
                     onChange={handleChange}
-                />
-                <input
-                    type='text'
-                    id='name'
-                    name='name'
-                    value={term}
                 />
                 {term.length <3 && <p>Search term must be at least 3 characters</p>}
             </form>

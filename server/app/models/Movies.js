@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Director = require('../models/Directors');
 
 const moviesSchema = new mongoose.Schema(
     {

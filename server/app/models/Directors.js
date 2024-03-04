@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Movie = require('../models/Movies');
 
 const directorsSchema = new mongoose.Schema(
     {
@@ -36,8 +37,8 @@ const directorsSchema = new mongoose.Schema(
         },
         movie: [
             {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Movie' 
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Movie' 
             },
         ]
     },

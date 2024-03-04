@@ -10,7 +10,6 @@ function App(){
 
   return(
     <div>
-      <h1>Director Search</h1>
       <SearchBar onSubmit={handleSearch}/>
     </div>
   )
